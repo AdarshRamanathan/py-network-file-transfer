@@ -88,7 +88,7 @@ if not silent:
     import progressbar
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.bind(('localhost', port))
+sock.bind(('0.0.0.0', port))
 
 if verbose:
     print 'waiting for connection from remote machine...'

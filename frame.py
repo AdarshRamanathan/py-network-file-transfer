@@ -8,5 +8,13 @@ def sendframe(sock, obj):
     sock.send(frame)
 
 def recvframe(sock):
-    size = struct.unpack('I', sock.recv(4))[0]
-    return json.loads(sock.recv(size).strip())
+    rcv = ''
+    while len(rcv) < 4:
+        rcv += sock.recv(4 - len(rcv))
+    size = struct.unpack('I', rcv)[0]
+
+    rcv = ''
+    while len(rcv) < size:
+        rcv += sock.recv(size - len(rcv))
+    
+    return json.loads(rcv)

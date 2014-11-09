@@ -98,7 +98,7 @@ for i in range(1, len(args)):
     print
     
     checksum = 0
-    buf = filehandle.read(1024)
+    buf = filehandle.read(4096)
 
     if not silent and verbose:
         print "sending file '%s'..." % args[i]
@@ -110,7 +110,7 @@ for i in range(1, len(args)):
         frame.sendframe(sock, {'type':'data', 'index':i, 'buffer':buf})
         if not silent:
             progressbar.printbar(args[i], bytes_sent, size)
-        buf = filehandle.read(1024)
+        buf = filehandle.read(4096)
 
     filehandle.close()
     frame.sendframe(sock, {'type':'metadata', 'subtype':'end', 'file':i, 'checksum':checksum})
