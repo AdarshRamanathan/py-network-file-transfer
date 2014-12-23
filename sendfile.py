@@ -57,6 +57,7 @@ import zlib
 import os
 import base64
 import ntpath
+import time
 
 if not silent:
     import progressbar
@@ -95,6 +96,7 @@ for i in range(1, len(args)):
     size = os.stat(args[i]).st_size
     bytes_sent = 0
     frame.sendframe(sock, {'type':'metadata', 'subtype':'init', 'index':i, 'name':pathleaf(args[i]), 'size':size})
+    starttime = time.time()
     print
     
     checksum = 0
@@ -109,7 +111,7 @@ for i in range(1, len(args)):
         buf = base64.b64encode(buf)
         frame.sendframe(sock, {'type':'data', 'index':i, 'buffer':buf})
         if not silent:
-            progressbar.printbar(args[i], bytes_sent, size)
+            progressbar.printbar(pathleaf(args[i]), bytes_sent, size, time.time() - starttime)
         buf = filehandle.read(4096)
 
     filehandle.close()

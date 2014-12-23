@@ -83,6 +83,7 @@ import socket
 import frame
 import zlib
 import base64
+import time
 
 if not silent:
     import progressbar
@@ -142,6 +143,7 @@ done = 0
 name = None
 handle = None
 checksum = 0
+starttime = 0
 
 if verbose:
     print 'receiving data...'
@@ -159,6 +161,7 @@ while True:
             done = 0
             checksum = 0
             handle = open(name, 'wb')
+            start = time.time()
         
         elif data['subtype'] == 'end':
 
@@ -190,7 +193,7 @@ while True:
             checksum ^= zlib.crc32(buf)
             done += len(buf)
             if not silent:
-                progressbar.printbar(name, done, size)
+                progressbar.printbar(name, done, size, (time.time() - start))
             handle.write(buf)
         
         else:
